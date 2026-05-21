@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ALS // Signature Reversal — Computational Hypothesis Generator</title>
+<meta name="description" content="Reverse-signature drug repurposing for ALS using published iPSC-MN transcriptomes and the LINCS connectivity-map database. A computational hypothesis generator, not a clinical recommendation." />
+<meta property="og:title" content="ALS Signature Reversal" />
+<meta property="og:description" content="Computational hypothesis generator for ALS drug repurposing. Open data + open code." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT,WONK@9..144,300..900,0..100,0..1&family=JetBrains+Mono:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Persistent ribbon: this stays visible on every scroll position -->
+<div class="ribbon" role="alert">
+  <span>↯</span>
+  <strong>Hypothesis generator</strong>
+  <span class="ribbon-sep">·</span>
+  <em>not a clinical recommendation</em>
+  <span class="ribbon-sep">·</span>
+  <span>computational ranking only</span>
+</div>
+
+<!-- Film grain overlay (SVG noise pattern, position:fixed) -->
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar">
+  <div class="topbar-l">
+    <span class="mono">FILE</span>
+    <span>als-signature-reversal</span>
+  </div>
+  <div class="topbar-c">
+    <span class="dot"></span>
+    <span class="mono" id="clock">— —:— —:— —</span>
+  </div>
+  <div class="topbar-r">
+    <a class="ghost" href="https://github.com/EricSpencer00/als-signature-reversal" target="_blank" rel="noopener">
+      <span class="mono">SRC</span> ↗
+    </a>
+  </div>
+</header>
+
+<main>
+
+  <!-- ───────────────────────────── HERO ───────────────────────────── -->
+  <section class="hero">
+    <div class="hero-meta">
+      <span>2026-05-20</span>
+      <span>·</span>
+      <span>E. SPENCER × CLAUDE</span>
+      <span>·</span>
+      <span>session 001</span>
+    </div>
+
+    <h1 class="display">
+      <span class="line stagger" data-delay="0">ALS</span>
+      <span class="line stagger" data-delay="80"><em>signature</em></span>
+      <span class="line stagger" data-delay="160">reversal<span class="punct">.</span></span>
+    </h1>
+
+    <p class="lede">
+      A computational pipeline that takes published per-genotype ALS
+      motor-neuron transcriptomes — <em>FUS&nbsp;R495X</em>, <em>FUS&nbsp;P525L</em>,
+      <em>FUS-KO</em>, <em>TARDBP&nbsp;M337V</em> — and asks the LINCS
+      connectivity-map database, in <span class="accent">reverse mode</span>,
+      which small-molecule perturbations might invert the disease signature.
+    </p>
+
+    <p class="lede secondary">
+      The answer is a ranked list of <span class="num" data-target="100">…</span>
+      candidates. None of them is a cure. Most are hypotheses pointing at
+      pathways. Read the
+      <a href="#limitations" class="inline-link">limitations</a> before the
+      results.
+    </p>
+
+    <div class="stat-row">
+      <div class="stat">
+        <div class="stat-num" data-target="100">…</div>
+        <div class="stat-label">unique candidates</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="6">…</div>
+        <div class="stat-label">ALS signatures queried</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="300">…</div>
+        <div class="stat-label">perturbation hits</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num" data-target="48">…</div>
+        <div class="stat-label">matched to Repurposing Hub</div>
+      </div>
+    </div>
+
+    <div class="scroll-cue" aria-hidden="true">
+      <span>scroll</span>
+      <span class="arrow">↓</span>
+    </div>
+  </section>
+
+
+  <!-- ───────────────────────────── METHOD ───────────────────────────── -->
+  <section class="method" id="method">
+    <header class="section-head">
+      <span class="section-num">01</span>
+      <h2>Method</h2>
+      <hr class="wipe" />
+    </header>
+
+    <ol class="steps">
+      <li>
+        <span class="step-n">i.</span>
+        <p>
+          Ingest per-genotype motor-neuron DEG tables from
+          <a href="https://doi.org/10.1038/s41467-025-59679-1" target="_blank" rel="noopener">Schweingruber&nbsp;et&nbsp;al. <em>Nat&nbsp;Commun</em>&nbsp;2025</a>.
+          Supplementary Data 4. <span class="mono small">padj&nbsp;&lt;&nbsp;0.05.</span>
+        </p>
+      </li>
+      <li>
+        <span class="step-n">ii.</span>
+        <p>
+          For each of <em>five</em> ALS conditions: extract top 150 up-regulated
+          and top 150 down-regulated genes by &vert;log2FC&vert;.
+          Build a sixth <em>shared</em> signature from genes called
+          significant + concordant in ≥&nbsp;3 of 5 conditions.
+        </p>
+      </li>
+      <li>
+        <span class="step-n">iii.</span>
+        <p>
+          Query <a href="https://maayanlab.cloud/L1000CDS2/" target="_blank" rel="noopener">L1000CDS²</a>
+          in <span class="accent">reverse mode</span>
+          (<span class="mono small">aggravate:&nbsp;false</span>).
+          Returns the top 50 perturbations per signature whose own LINCS
+          fingerprint <em>inverts</em> the input.
+        </p>
+      </li>
+      <li>
+        <span class="step-n">iv.</span>
+        <p>
+          Cross-annotate each hit against the
+          <a href="https://clue.io/repurposing" target="_blank" rel="noopener">Broad
+          Drug Repurposing Hub</a> (clinical phase, MoA, target) and a
+          curated table of 29 ALS-trial outcomes.
+          A drug that <em>already failed</em> in a well-powered ALS trial
+          carries a penalty.
+        </p>
+      </li>
+      <li>
+        <span class="step-n">v.</span>
+        <p>
+          Composite ranking: <span class="mono small">n_signatures × mean_score − trial_penalty</span>.
+          Output a sortable table of candidates with mechanism-of-action
+          context.
+        </p>
+      </li>
+    </ol>
+
+    <aside class="callout">
+      <h3>Why reverse-signature?</h3>
+      <p>
+        The LINCS L1000 project recorded gene-expression changes in ~62 cell
+        lines after ~20,000 small-molecule perturbations. A disease signature
+        is a set of up- and down-regulated genes. A drug whose own perturbation
+        signature is the <em>mirror image</em> of the disease signature is a
+        candidate for therapeutic reversal — the
+        <a href="https://www.cell.com/cell/fulltext/S0092-8674(17)31309-0" target="_blank" rel="noopener">connectivity-map</a>
+        hypothesis (Subramanian&nbsp;et&nbsp;al.&nbsp;2017).
+      </p>
+      <p class="muted">
+        It is hypothesis-generation, not validation. The L1000 panel does
+        <em>not</em> include human motor neurons.
+      </p>
+    </aside>
+  </section>
+
+
+  <!-- ───────────────────────────── RESULTS ───────────────────────────── -->
+  <section class="results" id="results">
+    <header class="section-head">
+      <span class="section-num">02</span>
+      <h2>Ranked candidates</h2>
+      <hr class="wipe" />
+    </header>
+
+    <div class="results-tools">
+      <label class="filter">
+        <span class="mono">/</span>
+        <input id="filter" type="text" placeholder="filter by name, MoA, target, phase…" autocomplete="off" />
+        <span class="hint mono">press / to focus</span>
+      </label>
+      <div class="toggle-row">
+        <button class="chip active" data-filter="all">all</button>
+        <button class="chip" data-filter="multi">≥2 signatures</button>
+        <button class="chip" data-filter="clinical">clinical phase</button>
+        <button class="chip" data-filter="moa">has MoA</button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table class="results-table" id="resultsTable">
+        <thead>
+          <tr>
+            <th data-sort="composite" class="sortable num-col desc">composite</th>
+            <th data-sort="n_sigs" class="sortable num-col">n_sigs</th>
+            <th data-sort="score_mean" class="sortable num-col">scorē</th>
+            <th data-sort="name" class="sortable">candidate</th>
+            <th data-sort="phase" class="sortable">phase</th>
+            <th data-sort="moa" class="sortable">mechanism</th>
+            <th data-sort="target" class="sortable">target</th>
+            <th>trial</th>
+          </tr>
+        </thead>
+        <tbody id="resultsBody">
+          <!-- rendered by script.js -->
+        </tbody>
+      </table>
+    </div>
+
+    <p class="table-foot mono">
+      <span id="visibleCount">…</span> / <span id="totalCount">…</span> rows
+      shown. Click column headers to sort. Score scale is L1000CDS²
+      reversal magnitude; treat as ranking only.
+    </p>
+  </section>
+
+
+  <!-- ───────────────────────────── SIGNATURES ───────────────────────────── -->
+  <section class="signatures" id="signatures">
+    <header class="section-head">
+      <span class="section-num">03</span>
+      <h2>Per-signature breakdown</h2>
+      <hr class="wipe" />
+    </header>
+    <p class="prose">
+      Each ALS condition produces a distinct top-50 hit list. The
+      <em>shared</em> signature distills genes consistently dysregulated
+      across genotypes — the strongest cross-mutation evidence.
+    </p>
+    <div class="sig-grid" id="sigGrid"></div>
+  </section>
+
+
+  <!-- ───────────────────────────── MoA ───────────────────────────── -->
+  <section class="moa" id="moa">
+    <header class="section-head">
+      <span class="section-num">04</span>
+      <h2>Mechanisms of action — clustering</h2>
+      <hr class="wipe" />
+    </header>
+    <p class="prose">
+      Convergence on a <em>pathway</em> is a stronger signal than convergence
+      on a single molecule (molecules can reflect L1000 cell-line bias;
+      pathways are harder to spoof). Categories below were extracted from
+      Drug Repurposing Hub MoA annotations across our top 60 ranked
+      compounds.
+    </p>
+    <div class="moa-bars" id="moaBars"></div>
+    <aside class="callout warm">
+      <p>
+        <strong>Recurring categories overlap known ALS biology:</strong>
+        HDAC inhibition (<a href="https://www.nature.com/articles/s41467-017-00911-y" target="_blank" rel="noopener">Guo&nbsp;2017</a> — HDAC6
+        rescues axonal transport in FUS-ALS), nuclear-cytoplasmic transport
+        modulation (<a href="https://link.springer.com/article/10.1007/s00401-016-1586-5" target="_blank" rel="noopener">Boeynaems&nbsp;2016</a> —
+        central to TDP-43 / FUS pathology), MAPK / B-RAF inhibition
+        (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12089939/" target="_blank" rel="noopener">Brain&nbsp;2025</a> independent
+        repurposing screen), CDK / kinase modulation, and lipid signalling
+        consistent with the
+        <a href="https://doi.org/10.1038/s41467-025-59679-1" target="_blank" rel="noopener">Schweingruber paper's own conclusion</a>
+        that mitochondrial dysfunction is the shared MN pathology.
+      </p>
+    </aside>
+  </section>
+
+
+  <!-- ───────────────────────────── LIMITATIONS ───────────────────────────── -->
+  <section class="limits" id="limitations">
+    <div class="limits-frame">
+      <div class="limits-head">
+        <span class="bracket">[</span>
+        <h2>The things this does NOT prove.</h2>
+        <span class="bracket">]</span>
+      </div>
+
+      <ul class="limits-list">
+        <li>
+          <span class="x">✕</span>
+          <div>
+            <strong>L1000 has no motor neurons.</strong>
+            The ~62 cell lines are predominantly cancer and immortalized
+            (MCF7, PC3, HA1E, A549). A signature reversal in MCF7
+            may not transfer to a human MN.
+          </div>
+        </li>
+        <li>
+          <span class="x">✕</span>
+          <div>
+            <strong>iPSC-MN DEGs have weak power.</strong>
+            The 2024 ALS iPSC-MN meta-analysis reports 13–43 DEGs between
+            ALS and control cohorts on average. The isogenic design used here
+            boosts the count, but signal is still iPSC-stage and may not
+            reflect mature post-mortem MN biology.
+          </div>
+        </li>
+        <li>
+          <span class="x">✕</span>
+          <div>
+            <strong>L1000CDS² scores are not P-values.</strong>
+            Connectivity-map cosine distance derived. Magnitude is ranking,
+            not significance.
+          </div>
+        </li>
+        <li>
+          <span class="x">✕</span>
+          <div>
+            <strong>Reverse signatures are hypotheses, not validations.</strong>
+            No candidate here is recommended for clinical follow-up without
+            independent preclinical confirmation in iPSC-MN rescue assays,
+            <em>SOD1</em>-G93A mouse, <em>C9orf72</em> models, or
+            post-mortem signature comparison.
+          </div>
+        </li>
+        <li>
+          <span class="x">✕</span>
+          <div>
+            <strong>The ALS-trial cross-check is curated, not exhaustive.</strong>
+            Covers ~29 well-publicized trials. A drug not flagged is
+            <em>not</em> "untried in ALS" — only "untried in our table."
+          </div>
+        </li>
+        <li>
+          <span class="x">✕</span>
+          <div>
+            <strong>Cell-line popularity bias not corrected.</strong>
+            Some L1000 perturbations appear in many cell-line signatures and
+            score artificially high. PMA, ionomycin, and other "common
+            perturbants" should be treated with extra skepticism.
+          </div>
+        </li>
+        <li>
+          <span class="x">✕</span>
+          <div>
+            <strong>No multiple-testing correction across the surface.</strong>
+            6 signatures × 50 hits = 300 perturbation–signature pairs.
+            We did not formally control FDR across this surface.
+          </div>
+        </li>
+      </ul>
+
+      <p class="limits-coda">
+        If you are <em>screening compounds against ALS&nbsp;targets</em>,
+        this site is upstream of the decision, not the decision itself.
+        Pair every candidate with an iPSC-MN rescue assay before assigning
+        it any weight.
+      </p>
+    </div>
+  </section>
+
+
+  <!-- ───────────────────────────── CITATIONS ───────────────────────────── -->
+  <section class="cite" id="cite">
+    <header class="section-head">
+      <span class="section-num">05</span>
+      <h2>References</h2>
+      <hr class="wipe" />
+    </header>
+    <ol class="refs">
+      <li>
+        Schweingruber&nbsp;C, Nijssen&nbsp;J, Mechtersheimer&nbsp;J, <em>et&nbsp;al.</em>
+        Single-cell RNA-sequencing reveals early mitochondrial dysfunction
+        unique to motor neurons shared across FUS- and TARDBP-ALS.
+        <em>Nature Communications</em> 2025;16.
+        <a href="https://doi.org/10.1038/s41467-025-59679-1" target="_blank" rel="noopener">doi:10.1038/s41467-025-59679-1</a>
+      </li>
+      <li>
+        Duan&nbsp;Q, <em>et&nbsp;al.</em>
+        L1000CDS²: LINCS L1000 characteristic direction signatures search
+        engine. <em>npj&nbsp;Syst&nbsp;Biol&nbsp;Appl</em> 2016;2:16015.
+      </li>
+      <li>
+        Subramanian&nbsp;A, <em>et&nbsp;al.</em>
+        A next generation connectivity map: L1000 platform and the first
+        1,000,000 profiles. <em>Cell</em> 2017;171:1437–1452.
+      </li>
+      <li>
+        Corsello&nbsp;SM, <em>et&nbsp;al.</em>
+        The Drug Repurposing Hub: a next-generation drug library and
+        information resource. <em>Nat&nbsp;Med</em> 2017;23:405–408.
+      </li>
+      <li>
+        Guo&nbsp;W, <em>et&nbsp;al.</em>
+        HDAC6 inhibition reverses axonal transport defects in motor
+        neurons derived from FUS-ALS patients.
+        <em>Nat&nbsp;Commun</em> 2017;8:861.
+      </li>
+      <li>
+        Boeynaems&nbsp;S, <em>et&nbsp;al.</em>
+        Inside out: the role of nucleocytoplasmic transport in ALS and
+        FTLD. <em>Acta&nbsp;Neuropathol</em> 2016;132:159–173.
+      </li>
+    </ol>
+  </section>
+
+</main>
+
+<footer>
+  <div class="footer-col">
+    <h4>Provenance</h4>
+    <p>
+      Generated on a single laptop in one session.
+      Data sources are public and freely re-downloadable.
+      The full pipeline is six Python files; the longest is 150 lines.
+    </p>
+  </div>
+  <div class="footer-col">
+    <h4>License</h4>
+    <p>
+      Code: MIT.<br />
+      Data: subject to source-data licenses (Schweingruber supplementary
+      is CC-BY-4.0; Drug Repurposing Hub per its terms).
+    </p>
+  </div>
+  <div class="footer-col">
+    <h4>Author</h4>
+    <p>
+      <a href="https://github.com/EricSpencer00" target="_blank" rel="noopener">Eric Spencer</a> ·
+      <a href="https://github.com/EricSpencer00/als-signature-reversal" target="_blank" rel="noopener">source</a>
+    </p>
+  </div>
+  <div class="footer-build mono">
+    <span id="buildTag">v0.1.0 / 2026-05-20</span>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
