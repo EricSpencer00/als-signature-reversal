@@ -1,0 +1,8 @@
+data/raw/*.gz
+data/raw/*.xlsx
+data/raw/*.txt
+.venv/
+*.egg-info/
+__pycache__/
+.ipynb_checkpoints/
+.DS_Store

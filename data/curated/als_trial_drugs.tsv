@@ -1,0 +1,30 @@
+drug	status	notes	reference
+riluzole	approved	First and only globally-approved ALS drug; modest survival benefit (~2-3 mo); glutamate-release inhibitor.	Lacomblez 1996, Lancet
+edaravone	approved	IV (2017) and oral (2022) approval; free-radical scavenger; benefit confined to subset.	Writing Group 2017, Lancet Neurol
+tofersen	approved	FDA accelerated approval 2023 for SOD1-ALS; antisense oligonucleotide.	Miller 2022, NEJM
+sodium phenylbutyrate-taurursodiol	withdrawn	AMX0035; FDA-approved 2022, voluntarily withdrawn 2024 after PHOENIX phase 3 failure.	Paganoni 2020, NEJM; Amylyx 2024
+lithium	failed	Multiple phase 2/3 trials; no benefit.	Aggarwal 2010, Lancet Neurol
+creatine	failed	Failed in NEALS trial.	Rosenfeld 2008, Neurology
+coenzyme Q10	failed	No benefit in phase 2.	Kaufmann 2009, Ann Neurol
+minocycline	failed	Harmful in phase 3 (faster progression).	Gordon 2007, Lancet Neurol
+ceftriaxone	failed	Failed in phase 3 despite preclinical promise.	Cudkowicz 2014, Lancet Neurol
+masitinib	failed	European Phase 3 failed primary endpoint; regulatory rejections.	Mora 2020, ALS-FTD
+pridopidine	failed	HEALEY platform regimen B; no benefit.	HEALEY 2023
+arimoclomol	failed	Phase 3 failed primary endpoint.	Cudkowicz 2021
+ibudilast	failed	Phase 2b/3 (COMBAT-ALS) did not meet endpoint.	MediciNova 2023
+verdiperstat	failed	HEALEY platform regimen E; no benefit.	HEALEY 2023
+zilucoplan	failed	HEALEY platform regimen C; no benefit.	HEALEY 2023
+gilenya-fingolimod	failed	Small phase 2 trial; no clinical benefit.	Berry 2017
+dexpramipexole	failed	EMPOWER phase 3 failed.	Cudkowicz 2013, Lancet Neurol
+talampanel	failed	AMPA antagonist; phase 2 failed.	Pascuzzi 2010
+tirasemtiv	failed	Skeletal muscle troponin activator; VITALITY-ALS failed.	Shefner 2019
+reldesemtiv	failed	Second-gen troponin activator; FORTITUDE-ALS missed endpoint.	Shefner 2021
+gabapentin	failed	Phase 3 failed.	Miller 2001
+topiramate	failed	Phase 2 worsened outcomes.	Cudkowicz 2003
+celecoxib	failed	Phase 3 negative.	Cudkowicz 2006
+ozanezumab	failed	Anti-Nogo-A; failed phase 2.	Meininger 2017
+NP001	failed	Multiple negative trials.	Miller 2015
+ravulizumab	failed	Phase 3 CHAMPION-ALS failed.	Alexion 2022
+methylcobalamin	mixed	Approved in Japan 2024 for early ALS based on small phase 3.	Oki 2024, JAMA Neurol
+levosimendan	failed	REFALS phase 3 negative.	Al-Chalabi 2021
+rasagiline	failed	Phase 2 negative.	Statland 2019
