@@ -3,6 +3,7 @@ name = "als-signature-reversal"
 version = "0.1.0"
 description = "Add your description here"
 requires-python = ">=3.11"
+license = { text = "MIT" }
 dependencies = [
     "anndata>=0.12.16",
     "gseapy>=1.2.1",
